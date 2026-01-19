@@ -46,16 +46,6 @@ The engine supports **rebalancing** after a given change in interest rate to i_n
 
 ## Example Output
 
-A typical run reports:
-
-- Initial immunization success
-- Required asset cashflows
-- Present values at time 0
-- Rebalancing requirements after a rate shock
-- Interval of solvency (Redington only)
-
-Example excerpt:
-
 === REDINGTON IMMUNIZATION ===
 
 Redington immunization succeeded at i₀ = 0.1000
