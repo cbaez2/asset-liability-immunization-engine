@@ -1,119 +1,197 @@
-# Asset–Liability Immunization Engine
+# Asset–Liability Immunization Engine (Python)
 
-A deterministic Python engine for constructing and rebalancing **two-asset portfolios** that immunize a given stream of liabilities under either **Full Immunization** or **Redington Immunization**.
+## Overview
 
-The engine supports:
-- exact asset cashflow construction,
-- dynamic rebalancing after interest-rate changes and/or passage of time,
-- and (for Redington) computation of a finite **interval of solvency**.
+This project is a **deterministic Asset–Liability Immunization engine** implemented in Python using **SymPy**.
 
-This project is intended as an **actuarial / ALM tool**, not a theoretical proof framework.
+Given:
+- an interes rate i0
+- a fixed set of liability cashflow amounts,
+- corresponding liability times, and
+- exactly **two asset times**,
+
+the program computes the **two asset cashflows** required to achieve either:
+
+- **Full Immunization**, or
+- **Redington Immunization**.
+
+The engine also supports **rebalancing** after:
+- a change in interest rate, and/or
+- the passage of time.
+
+For **Redington Immunization**, the engine additionally computes a **finite interval of solvency** over which the surplus function remains non-negative.
 
 ---
 
 ## Features
 
-### 1. Full Immunization
-- Constructs two asset cashflows that match:
+### Full Immunization
+
+- Matches:
   - Present Value
-  - First derivative w.r.t. interest rate (duration)
-- Enforces classical actuarial assumptions on the interest-rate domain.
-- Supports rebalancing after:
-  - rate shocks,
-  - passage of time,
-  - receipt of asset cashflows.
-
-### 2. Redington Immunization
-- Constructs two asset cashflows that satisfy:
-  - Present Value matching,
-  - Duration matching,
-  - Positive surplus convexity at the base rate.
-- Allows liability timing both inside and outside the asset interval.
-- Supports dynamic rebalancing after rate/time changes.
-- Computes a **finite interval of solvency** from the surplus function.
-
-### 3. Rebalancing Engine
-For both immunization types:
-- Handles rebalancing at arbitrary times \( t_n \),
-- Handles interest-rate changes from \( i_0 \) to \( i_n \),
-- Correctly accounts for already-received asset cashflows.
-
-### 4. Reporting
-- All outputs are:
-  - rounded to 4 decimal places,
-  - clearly labeled with units,
-  - expressed with actuarially standard notation.
-- Asset cashflows are reported together with:
-  - **PV₀ evaluated at the current rate** (e.g. `PV₀ = … @ iₙ`).
+  - First derivative (duration)
+- Enforces classical ALA constraints
+- Computes exact asset cashflows symbolically
+- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
 
 ---
 
-## Project Structure
+### Redington Immunization
 
-asset-liability-immunization-engine/
-│
-├── main.py # Control file: select parameters and run the engine
-├── full_imm.py # Full immunization constructor
-├── full_rebalancer.py # Full immunization rebalancing logic
-├── red_imm.py # Redington immunization constructor
-├── red_rebalancer.py # Redington rebalancing logic
-├── interval_finder.py # Interval of solvency computation (Redington)
-└── README.md
-
+- Matches:
+  - Present Value
+  - Duration
+  - Positive second derivative (convexity)
+- Allows liabilities outside the asset interval
+- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
+- Computes a **finite interval of solvency** directly from the surplus function
 
 ---
 
-## How to Run
+# Asset–Liability Immunization Engine (Python)
 
-1. Open `main.py`.
-2. Set:
-   - base interest rate `i0`,
-   - liability amounts and times,
-   - asset times,
-   - immunization type (`FULL` or `REDINGTON`),
-   - rebalancing parameters (`i_n`, `t_n`).
-3. Run:
-   ```bash
-   python main.py
-The engine prints:
+## Overview
 
-initial asset construction,
+This project is a **deterministic Asset–Liability Immunization engine** implemented in Python using **SymPy**.
 
-rebalancing requirements,
+Given:
+- a fixed set of liability cashflow amounts,
+- corresponding liability times, and
+- exactly **two asset times**,
 
-and (if applicable) the interval of solvency.
+the program computes the **two asset cashflows** required to achieve either:
 
-Scope and Assumptions
-Exactly two asset cashflows are used.
+- **Full Immunization**, or
+- **Redington Immunization**.
 
-Deterministic interest-rate framework.
+The engine also supports **rebalancing** after:
+- a change in interest rate, and/or
+- the passage of time.
 
-Classical actuarial discounting 
-(
-1
-+
-𝑖
-)
-−
-𝑡
-(1+i) 
-−t
- .
+For **Redington Immunization**, the engine additionally computes a **finite interval of solvency** over which the surplus function remains non-negative.
 
-The engine is constructive and diagnostic, not stochastic or optimization-based.
+This project is a **computational tool**, not a proof system.
 
-Intended Use
-This project is suitable for:
+---
 
-actuarial ALM demonstrations,
+## Features
 
-immunization mechanics analysis,
+### Full Immunization
 
-portfolio rebalancing studies,
+- Matches:
+  - Present Value
+  - First derivative (duration)
+- Enforces classical ALA constraints
+- Computes exact asset cashflows symbolically
+- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
 
-academic or internship portfolio projects.
+---
 
-Author
-Created by Christopher Baez
-Actuarial Science / Risk Management
-Python • SymPy • Asset–Liability Management
+### Redington Immunization
+
+- Matches:
+  - Present Value
+  - First derivative
+  - Positive second derivative (convexity)
+- Allows liabilities outside the asset interval
+- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
+- Computes a **finite interval of solvency** directly from the surplus function
+
+---
+
+## File Descriptions
+
+### `main.py`
+
+- Central control file
+- User specifies:
+  - Immunization type (`FULL` or `REDINGTON`)
+  - Base interest rate `i0`
+  - Asset times
+  - Liability amounts and times
+  - Rebalancing time `t_n` and rate `i_n`
+- Executes the full pipeline and prints results
+- No runtime user input is required
+
+---
+
+### `full_imm.py`
+
+- Computes the two asset cashflows required to achieve **full immunization**
+- Solves for present value and duration matching
+
+---
+
+### `full_rebalancer.py`
+
+- Rebalances a fully immunized portfolio after:
+  - a change in interest rate, and/or
+  - the passage of time
+- Correctly handles cases where one asset cashflow has already been received
+
+---
+
+### `red_imm.py`
+
+- Computes the two asset cashflows required to achieve **Redington immunization**
+- Enforces:
+  - present value matching,
+  - first derivative matching,
+  - positive second derivative at `i0`
+
+---
+
+### `red_rebalancer.py`
+
+- Rebalances a Redington-immunized portfolio after:
+  - a change in interest rate, and/or
+  - the passage of time
+- Preserves Redington conditions locally
+
+---
+
+### `interval_finder.py`
+
+- Analyzes the Redington surplus function
+- Computes the **interval of solvency**:
+  - the set of interest rates for which the surplus remains non-negative
+
+## Example Output
+
+A typical run reports:
+
+- Initial immunization success
+- Required asset cashflows
+- Present values at time 0
+- Rebalancing requirements after a rate shock
+- Interval of solvency (Redington only)
+
+Example excerpt:
+
+=== REDINGTON IMMUNIZATION ===
+
+Redington immunization succeeded at i₀ = 0.1000
+
+Liabilities:
+  amounts = [1000, 1000, 1000, 1000, 1000]
+  times   = [0, 1, 2, 3, 4]
+
+Required asset cashflows:
+  cf_x = $3,843.6664 at t = 1  (PV₀ = $3,494.2422 at i₀)
+  cf_y = $1,196.9078 at t = 6  (PV₀ = $675.6232 at i₀)
+
+
+--- REBALANCING ---
+
+The original surplus function evaluated at iₙ = 0.5000 is:
+$62.5843
+
+To be Redington immunized at iₙ = 0.5000 and t = 0, you need:
+cf_x = $3,843.6664 at t = 1 (PV₀ = $2,562.4443 @ iₙ)
+cf_y = $1,196.9078 at t = 6 (PV₀ = $105.0783 @ iₙ)
+
+--- INTERVAL OF SOLVENCY ---
+
+S(i) ≥ 0  ∀  i ∈ (0, 1.01475833214883]
+
+
