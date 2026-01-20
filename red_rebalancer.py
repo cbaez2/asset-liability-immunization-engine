@@ -101,7 +101,7 @@ def new_cfs(i_n, t_n):
             )
 
         return (
-            f"Could not find cf_x and cf_y satisfying Redington immunization "
+            f"Could not find cf_x at t = {a_times[0]} and cf_y at t = {a_times[1]} satisfying Redington immunization "
             f"at t = {t_n} and iₙ = {rate(i_n)}."
         )
 
@@ -148,14 +148,10 @@ def new_cfs(i_n, t_n):
             )
 
         return (
-            f"Could not find cf_y satisfying Redington immunization "
+            f"Could not find cf_y at t = {a_times[1]} satisfying Redington immunization "
             f"at t = {t_n} and iₙ = {rate(i_n)}, "
-            f"given cf_x already received."
+            f"given cf_x already received at t = {a_times[0]}."
         )
-
-
-
-
 
 
 
