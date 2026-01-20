@@ -98,7 +98,7 @@ def new_cfs(i_n, t_n):
             )
 
         return (
-            f"Could not find cf_x and cf_y that satisfy full immunization "
+            f"Could not find cf_x at t = {a_times[0]} and cf_y at t= {a_times[1]} that satisfy full immunization "
             f"at t = {t_n} and iₙ = {rate(i_n)}."
         )
 
