@@ -46,8 +46,10 @@ The engine supports **rebalancing** after a given change in interest rate to i_n
 
 ## Requirements
 
-- Python 3.10+
-- sympy
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
 
 ## How to Run
 
