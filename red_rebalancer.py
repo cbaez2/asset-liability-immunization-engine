@@ -101,6 +101,8 @@ def new_cfs(i_n, t_n):
             )
 
         return (
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
             f"Could not find cf_x at t = {a_times[0]} and cf_y at t = {a_times[1]} satisfying Redington immunization "
             f"at t = {t_n} and iₙ = {rate(i_n)}."
         )
@@ -148,6 +150,8 @@ def new_cfs(i_n, t_n):
             )
 
         return (
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
             f"Could not find cf_y at t = {a_times[1]} satisfying Redington immunization "
             f"at t = {t_n} and iₙ = {rate(i_n)}, "
             f"given cf_x already received at t = {a_times[0]}."
