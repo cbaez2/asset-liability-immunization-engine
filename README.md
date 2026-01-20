@@ -15,7 +15,8 @@ the program computes the **two asset cashflows** required to achieve either:
 - **Full Immunization**, or
 - **Redington Immunization**.
 
-The engine supports **rebalancing** after a given change in interest rate to i_n and/or time to t_n, and for Redington immunization it computes a **finite interval of solvency**, the set of interest rates for which the surplus remains non-negative.
+The engine supports **rebalancing** following a change in interest rate to `i_n` and/or time to `t_n`.  
+For Redington immunization, it additionally computes an **interval of solvency**, defined as the set of interest rates for which the surplus remains non-negative.
 
 ---
 
