@@ -17,6 +17,8 @@ For **Redington immunization only**, the engine additionally computes an **inter
 For **both immunization types**, the engine supports **rebalancing under a change in interest rate to `i_n` and time to `t_n`**, recalculating the asset cashflows required to re-immunize the portfolio and reporting the resulting surplus at `i_n`.  
 The **present values of the asset cashflows at `t = 0`** are also reported under their corresponding interest rates (`i_0` or `i_n`).
 
+The project also includes a **graphical representation of the surplus function** \( S(i) \), allowing visualization of surplus behavior across interest rates for both Full and Redington immunization cases.
+
 ---
 
 ## Features
