@@ -127,6 +127,19 @@ From the terminal, run:
 python main.py
 ```
 You must close the image file to re-run the model.
+
+## Feedback, Issues, and Contributions
+
+Feedback and suggestions are welcome.
+
+If you encounter a bug, unexpected behavior, or edge case, feel free to open an **issue** describing:
+- the inputs used,
+- the observed behavior,
+- and the expected behavior.
+
+Contributions, extensions, and theoretical discussions related to asset–liability immunization are also welcome.  
+Please open an issue or pull request if you would like to collaborate.
+
   
 ##  Author
 
