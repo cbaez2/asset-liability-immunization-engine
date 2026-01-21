@@ -48,15 +48,17 @@ def new_cfs(i_n, t_n):
 
         pv_x = pv_at_i_n(full_result["cf_x"], a_times[0], i_n)
         pv_y = pv_at_i_n(full_result["cf_y"], a_times[1], i_n)
+        pv_total = pv_x + pv_y
 
         return (
-            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${r4(S_eval)}\n\n"
-            f"To be fully immunized at iₙ = {rate(i_n)}, you need:\n"
+            f"To restore full immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
             f"cf_x = {money(full_result['cf_x'])} at t = {a_times[0]} "
             f"(PV₀ = {money(pv_x)} @ iₙ)\n"
             f"cf_y = {money(full_result['cf_y'])} at t = {a_times[1]} "
-            f"(PV₀ = {money(pv_y)} @ iₙ)"
+            f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+            f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${r4(S_eval)}"
         )
 
     # ===============================
@@ -86,22 +88,24 @@ def new_cfs(i_n, t_n):
         ):
             pv_x = pv_at_i_n(x_val, a_times[0]-t_n, i_n)
             pv_y = pv_at_i_n(y_val, a_times[1]-t_n, i_n)
+            pv_total = pv_x + pv_y
 
             return (
-                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-                f"${r4(full_result['s(i)'].subs(i, i_n))}\n\n"
-                f"To restore full immunization at t = {t_n}, you need:\n"
+                f"To restore full immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
                 f"cf_x = {money(x_val)} at t = {a_times[0]} "
                 f"(PV₀ = {money(pv_x)} @ iₙ)\n"
                 f"cf_y = {money(y_val)} at t = {a_times[-1]} "
-                f"(PV₀ = {money(pv_y)} @ iₙ)"
+                f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+                f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+                f"${r4(full_result['s(i)'].subs(i, i_n))}"
             )
 
         return (
+            f"Could not find cf_x at t = {a_times[0]} and cf_y at t = {a_times[1]} "
+            f"that satisfy full immunization at t = {t_n} under iₙ = {rate(i_n)}.\n\n"
             f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${r4(full_result['s(i)'].subs(i, i_n))}\n\n"
-            f"Could not find cf_x at t = {a_times[0]} and cf_y at t= {a_times[1]} that satisfy full immunization "
-            f"at t = {t_n} and iₙ = {rate(i_n)}."
+            f"${r4(full_result['s(i)'].subs(i, i_n))}"
         )
 
     # ===============================
@@ -129,20 +133,23 @@ def new_cfs(i_n, t_n):
         if sp.diff(PV_A, i, 1).subs(i, i_n) == sp.diff(PV_L, i, 1).subs(i, i_n):
 
             pv_y = pv_at_i_n(new_y_val, a_times[1]-t_n, i_n)
+            pv_total = pv_y
 
             return (
-                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-                f"${r4(full_result['s(i)'].subs(i, i_n))}\n\n"
                 f"You have already received {money(full_result['cf_x'])} at t = {a_times[0]}.\n"
-                f"To restore full immunization at t = {t_n}, you need:\n"
+                f"To restore full immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
                 f"cf_y = {money(new_y_val)} at t = {a_times[1]} "
-                f"(PV₀ = {money(pv_y)} @ iₙ)"
+                f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+                f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+                f"${r4(full_result['s(i)'].subs(i, i_n))}"
             )
 
         return (
-            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${r4(full_result['s(i)'].subs(i, i_n))}\n\n"
             f"Could not find a cf_y at t = {a_times[1]} that satisfies full immunization "
-            f"at t = {t_n} and iₙ = {rate(i_n)}, given that "
-            f"{money(full_result['cf_x'])} was already received at t = {a_times[0]}."
+            f"at t = {t_n} under iₙ = {rate(i_n)}, given that "
+            f"{money(full_result['cf_x'])} was already received at t = {a_times[0]}.\n\n"
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${r4(full_result['s(i)'].subs(i, i_n))}"
         )
+
