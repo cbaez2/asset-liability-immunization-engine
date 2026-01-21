@@ -39,24 +39,24 @@ l_times     = [0,1,2,3,4,5,6,7,8,9,10,11]
 # --------------------------------------------------
 # ASSET CASH FLOW TIMES
 # --------------------------------------------------
-# a_times : times (years) of the two asset cash flows
+# a_times : times of the two asset cash flows
 #
 # Output:
 # - cf_x, cf_y: asset cash flow amounts and their PVs
-# - All PVs computed at t = 0 using i0
+# - All PVs computed at t = 0 under i0
 a_times = [0,12]
 
 
 # --------------------------------------------------
-# REBALANCING / EVALUATION PARAMETERS
+# RE-IMMUNIZATION / EVALUATION PARAMETERS
 # --------------------------------------------------
 # i_n : new interest rate, domain (0, ∞)
-# t_n : rebalancing time, domain (0, last asset time)
+# t_n : re-immunization time, domain (0, last asset time)
 #
 # Output:
-# - Re-immunized asset cash flows (cf_x, cf_y) and PVs based on chosen i_n and t_n
-# - PVs computed at t = 0 using i_n
-# - If Redington: interval of solvency { i : S(i) ≥ 0 }
+# - asset cash flows (cf_x, cf_y) needed to re-immunize asset portfolio at t_n under i_n and their PVs
+# - All PVs computed at t = 0 using i_n 
+# - If Redington: interval of solvency { i : S(i) ≥ 0 } where S(i) = PV_A(i) - PV_L(i), the surplus as a function of i
 
 i_n = 0.50
 t_n = 10
