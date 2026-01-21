@@ -1,62 +1,71 @@
 # ==================================================
 # USER-EDITABLE PARAMETERS
 # ==================================================
-# ONLY EDIT THIS FILE TO CHANGE MODEL PARAMETERS
+# ONLY EDIT THIS FILE TO CHANGE MODEL BEHAVIOR
 # ==================================================
 
 # --------------------------------------------------
 # IMMUNIZATION TYPE
 # --------------------------------------------------
-# "full"       → Full immunization (PV + Duration matching + ALA cashflow structure)
-# "redington"  → Redington immunization (PV + Duration + convexity of assets > convexity of liabilities )
+# Choose immunization method:
+# "full"      → PV + Duration matching + ALA cashflow structure
+# "redington" → PV + Duration + asset convexity > liability convexity
 IMMUNIZATION_TYPE = "full"
 
 
 # --------------------------------------------------
 # BASE INTEREST RATE
 # --------------------------------------------------
-# i0 : interest rate to immunize asset portfolio
-# Domain: i0 >= 0
+# i0 : interest rate at which the asset portfolio is immunized
+# Domain: i0 ≥ 0
 i0 = 0.05
 
 
 # --------------------------------------------------
 # LIABILITY CASH FLOWS
 # --------------------------------------------------
-# liabilities[k] : amount of the k-th liability
-# l_times[k]     : time at which liabilities[k] is due
-# Liability structure is summarized and evaluated at i0
-#
-# Conventions:
-# - liabilities and l_times must have the same length
-# - l_times are assumed to be sorted in ascending order
+# - liabilities: liability amounts
+# - l_times: corresponding liability times
+# Constraints:
+# - Same length
+# - l_times sorted ascending
 # - No duplicate liability times
 
-liabilities = [2600]*12
-l_times     = [0,1,2,3,4,5,6,7,8,9,10,11]
+liabilities = [1000, 1000, 1000, 1000, 1000]
+l_times     = [0, 1, 2, 3, 4]
+
+# Interpreted as: 1000 due at t=0,1,2,3,4 respectively
 
 
 # --------------------------------------------------
 # ASSET CASH FLOW TIMES
 # --------------------------------------------------
-# a_times : times of the two asset cash flows
+# Specify asset cashflow times:
+# - cf_x occurs at a_times[0]
+# - cf_y occurs at a_times[1]
 #
 # Output:
-# - cf_x, cf_y: asset cash flow amounts and their PVs
-# - All PVs computed at t = 0 under i0
-a_times = [0,12]
+# - cf_x, cf_y amounts and their present values
+# - All PVs computed at t = 0 using i0
+
+a_times = [1, 6]   # cf_x at t=1, cf_y at t=6
 
 
 # --------------------------------------------------
 # RE-IMMUNIZATION / EVALUATION PARAMETERS
 # --------------------------------------------------
-# i_n : new interest rate, domain (0, ∞)
-# t_n : re-immunization time, domain (0, last asset time)
+# i_n : new interest rate for re-immunization
+#       Domain: (0, ∞)
+#
+# t_n : re-immunization time
+#       Domain: 0 ≤ t_n < last asset time
 #
 # Output:
-# - asset cash flows (cf_x, cf_y) needed to re-immunize asset portfolio at t_n under i_n and their PVs
-# - All PVs computed at t = 0 using i_n 
-# - If Redington: interval of solvency { i : S(i) ≥ 0 } where S(i) = PV_A(i) - PV_L(i), the surplus as a function of i
+# - Adjusted asset cashflows (cf_x, cf_y) at t_n under i_n
+# - PVs computed at t = 0 using i_n
+# - If Redington: interval of solvency { i : S(i) ≥ 0 },
+#   where S(i) = PV_A(i) − PV_L(i)
 
 i_n = 0.50
 t_n = 10
+
