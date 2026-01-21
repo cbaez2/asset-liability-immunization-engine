@@ -1,46 +1,92 @@
-import sympy as sp
+import numpy as np
+from scipy.optimize import brentq
 from red_imm import red_immunization_two_cf
 from main import a_times, l_times, i0, liabilities
 
 red_result = red_immunization_two_cf(
-            i0=i0,
-            a_times=a_times,
-            liabilities=liabilities,
-            l_times=l_times
-        )
+    i0=i0,
+    a_times=a_times,
+    liabilities=liabilities,
+    l_times=l_times
+)
 
-def interval_finder(S_i,i0):
-    assert isinstance(S_i, sp.Expr), "Parameter must be a SymPy expression"
-    i,r = sp.symbols('i,r')
+# 🔴 FIX 1: force numeric coefficients ONCE
+cf_x = float(red_result["cf_x"])
+cf_y = float(red_result["cf_y"])
 
-    #finding simbolic roots
-    s_roots= sp.solve(S_i.subs(i,r), r)
 
-    #evaluaing symbolic roots
-    n_roots = [root.evalf() for root in s_roots if root.is_real]
+# ===============================
+# SURPLUS FUNCTION (PURE NUMERIC)
+# ===============================
 
-    #filtering roots
-    roots_greater_than_i0 = sorted(list(x for x in n_roots if x > i0))
-    roots_less_than_i0 = sorted(list(x for x in n_roots if x < i0 and x>0),reverse=True)
+def S(i):
+    # domain guard (prevents nan / inf)
+    if i <= -1:
+        return np.nan
 
-    #by default assume we are solvent for all i>0
-    i_r= float('inf')
-    i_l = 0
+    v = 1.0 / (1.0 + i)
 
-    #finding a root "i_r" to the right of i0 such that S(i_r) = 0 and S'(i_r) <0
-    #note we are finding roots that are greater than i0 by default
+    PV_A = cf_x * v**a_times[0] + cf_y * v**a_times[1]
+    PV_L = sum(float(L) * v**t for L, t in zip(liabilities, l_times))
 
-    for root in roots_greater_than_i0:
-        if sp.diff(S_i,i,1).subs(i,root)<0:
-                i_r = root
-                break
+    return float(PV_A - PV_L)
 
-    #finding a root "i_l" to the left of i0 such that S(i_l) = 0 and S'(i_l) >0
-    #note we are finding roots that are less than i0 by defualt
 
-    for root in roots_less_than_i0:
-        if sp.diff(S_i,i,1).subs(i,root) >0:
-                i_l = root
-                break
+# ===============================
+# NUMERIC DERIVATIVE
+# ===============================
 
-    return [i_l, i_r]
+def dS(i, h=1e-6):
+    return (S(i + h) - S(i - h)) / (2 * h)
+
+
+# ===============================
+# ROOT FINDER (ROBUST, SAFE)
+# ===============================
+
+def find_roots(i_min=0.0, i_max=5.0, N=4000):
+    grid = np.linspace(i_min, i_max, N)
+    vals = np.array([S(x) for x in grid], dtype=float)
+
+    roots = []
+
+    for x1, x2, f1, f2 in zip(grid[:-1], grid[1:], vals[:-1], vals[1:]):
+        if not np.isfinite(f1) or not np.isfinite(f2):
+            continue
+        if f1 == 0.0:
+            roots.append(x1)
+        elif f1 * f2 < 0.0:
+            try:
+                roots.append(brentq(S, x1, x2))
+            except ValueError:
+                pass
+
+    return sorted(set(roots))
+
+
+# ===============================
+# INTERVAL OF SOLVENCY (YOUR LOGIC)
+# ===============================
+
+def interval_finder(i0):
+    roots = find_roots()
+
+    roots_right = [r for r in roots if r > i0]
+    roots_left  = [r for r in roots if 0 < r < i0][::-1]
+
+    i_L = 0.0
+    i_R = float("inf")
+
+    # RIGHT bound: S(r)=0 AND decreasing
+    for r in roots_right:
+        if dS(r) < 0:
+            i_R = r
+            break
+
+    # LEFT bound: S(r)=0 AND increasing
+    for r in roots_left:
+        if dS(r) > 0:
+            i_L = r
+            break
+
+    return i_L, i_R
