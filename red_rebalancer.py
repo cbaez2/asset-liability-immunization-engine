@@ -40,15 +40,17 @@ def new_cfs(i_n, t_n):
     if t_n == 0:
         pv_x = pv_at_i_n(red_result["cf_x"], a_times[0], i_n)
         pv_y = pv_at_i_n(red_result["cf_y"], a_times[1], i_n)
+        pv_total = pv_x + pv_y
 
         return (
-            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
-            f"To be Redington immunized at iₙ = {rate(i_n)} and t = {t_n}, you need:\n"
+            f"To restore Redington immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
             f"cf_x = {money(red_result['cf_x'])} at t = {a_times[0]} "
             f"(PV₀ = {money(pv_x)} @ iₙ)\n"
             f"cf_y = {money(red_result['cf_y'])} at t = {a_times[1]} "
-            f"(PV₀ = {money(pv_y)} @ iₙ)"
+            f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+            f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}"
         )
 
     # ===============================
@@ -89,22 +91,24 @@ def new_cfs(i_n, t_n):
         ):
             pv_x = pv_at_i_n(x_val, a_times[0]-t_n, i_n)
             pv_y = pv_at_i_n(y_val, a_times[1]-t_n, i_n)
+            pv_total = pv_x + pv_y
 
             return (
-                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-                f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
-                f"To restore Redington immunization at t = {t_n}, you need:\n"
+                f"To restore Redington immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
                 f"cf_x = {money(x_val)} at t = {a_times[0]} "
                 f"(PV₀ = {money(pv_x)} @ iₙ)\n"
                 f"cf_y = {money(y_val)} at t = {a_times[1]} "
-                f"(PV₀ = {money(pv_y)} @ iₙ)"
+                f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+                f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+                f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}"
             )
 
         return (
+            f"Could not find cf_x at t = {a_times[0]} and cf_y at t = {a_times[1]} "
+            f"satisfying Redington immunization at t = {t_n} under iₙ = {rate(i_n)}.\n\n"
             f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
-            f"Could not find cf_x at t = {a_times[0]} and cf_y at t = {a_times[1]} satisfying Redington immunization "
-            f"at t = {t_n} and iₙ = {rate(i_n)}."
+            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}"
         )
 
     # ===============================
@@ -139,23 +143,22 @@ def new_cfs(i_n, t_n):
             and sp.diff(S, i, 2).subs(i, i_n) > 0
         ):
             pv_y = pv_at_i_n(new_y_val, a_times[1]-t_n, i_n)
+            pv_total = pv_y
 
             return (
-                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-                f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
                 f"You have already received {money(red_result['cf_x'])} at t = {a_times[0]}.\n"
-                f"To restore Redington immunization at t = {t_n}, you need:\n"
+                f"To restore Redington immunization at t = {t_n} under iₙ = {rate(i_n)}, you need:\n"
                 f"cf_y = {money(new_y_val)} at t = {a_times[1]} "
-                f"(PV₀ = {money(pv_y)} @ iₙ)"
+                f"(PV₀ = {money(pv_y)} @ iₙ)\n"
+                f"TOTAL PV₀ (assets) = {money(pv_total)} @ iₙ\n\n"
+                f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+                f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}"
             )
 
         return (
-            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
-            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}\n\n"
             f"Could not find cf_y at t = {a_times[1]} satisfying Redington immunization "
-            f"at t = {t_n} and iₙ = {rate(i_n)}, "
-            f"given cf_x already received at t = {a_times[0]}."
+            f"at t = {t_n} under iₙ = {rate(i_n)}, "
+            f"given cf_x already received at t = {a_times[0]}.\n\n"
+            f"The original surplus function evaluated at iₙ = {rate(i_n)} is:\n"
+            f"${sp.N(red_result['s(i)'].subs(i, i_n), 6)}"
         )
-
-
-
