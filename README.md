@@ -50,6 +50,7 @@ The project also includes a **graphical representation of the surplus function**
 - sympy
 - numpy
 - scipy
+- matplotlib
 
 ### Install dependencies
 ```bash
