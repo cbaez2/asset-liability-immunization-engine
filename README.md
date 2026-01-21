@@ -2,16 +2,16 @@
 
 ## Overview
 
-This project is a **deterministic Portofolio Immunization engine** implemented in Python using **SymPy**. that computes two asset cashflows satisfying full or Redington immunization conditions,
+This project is a **deterministic Portofolio Immunization engine** implemented in Python using **SymPy** that computes two asset cashflows satisfying full or Redington immunization conditions,
 
 given:
 - a base interest rate i0
 - exactly **two asset times**,
-- a fixed set of liability cashflow amounts,
-- corresponding liability times, and
+- a fixed set of liability cashflow amounts and,
+- corresponding liability times.
 
 For Redington immunization, it additionally computes an **interval of solvency**, defined as the set of interest rates for which the surplus remains non-negative.
-The engine recalculates asset cashflows needed to re-immunize the portflio given a change interest rate to `i_n` and time to `t_n`.  
+For both immunization types, the engine recalculates asset cashflows needed to re-immunize the portflio given a change interest rate to `i_n` and time to `t_n` as well as the surplus at `i_n`.
 
 ---
 
@@ -19,23 +19,23 @@ The engine recalculates asset cashflows needed to re-immunize the portflio given
 
 ### Full Immunization
 
-- Matches:
+- Matches asssets and liabilities:
   - Present Value
   - First derivative (duration)
-- Enforces classical ALA constraints
-- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
+- Enforces ALA cashflow structure.
+- Recalculates asset cashflows needed to re-immunize the portflio given a change interest rate to `i_n` and time to `t_n` as well as the surplus at `i_n`
 
 ---
 
 ### Redington Immunization
 
-- Matches:
+- Matches asssets and liabilities:
   - Present Value
   - Duration
-  - Positive second derivative (convexity)
-- Allows liabilities outside the asset interval
-- Supports rebalancing at arbitrary time `t_n` and interest rate `i_n`
-- Computes a **finite interval of solvency** directly from the surplus function
+- Positive second derivative of the surplus function `S''(i)>0`
+- Allows any type of asset and liability structure.
+- Recalculates asset cashflows needed to re-immunize the portflio given a change interest rate to `i_n` and time to `t_n` as well as the surplus at `i_n`
+- Computes a **finite interval of solvency** directly from the surplus function.
 
 ---
 
