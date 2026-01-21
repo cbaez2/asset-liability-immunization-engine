@@ -44,6 +44,8 @@ The **present values of the asset cashflows at `t = 0`** are also reported under
 ## Requirements
 - Python 3.10+
 - sympy
+- numpy
+- scipy
 
 ### Install dependencies
 ```bash
