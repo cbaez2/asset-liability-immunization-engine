@@ -28,7 +28,7 @@ i0 = 0.05
 # - l_times: corresponding liability times
 # Constraints:
 # - Same length
-# - l_times sorted ascending
+# - l_times must be sorted in ascending order and be non-negative
 # - No duplicate liability times
 
 liabilities = [1000, 1000, 1000, 1000, 1000]
@@ -40,7 +40,7 @@ l_times     = [0, 1, 2, 3, 4]
 # --------------------------------------------------
 # ASSET CASH FLOW TIMES
 # --------------------------------------------------
-# Specify asset cashflow times:
+# Specify non-negative asset cashflow times.
 # - cf_x occurs at a_times[0]
 # - cf_y occurs at a_times[1]
 #
