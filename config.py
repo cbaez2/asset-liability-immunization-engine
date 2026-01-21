@@ -66,6 +66,6 @@ a_times = [1, 6]   # cf_x at t=1, cf_y at t=6
 # - If Redington: interval of solvency { i : S(i) ≥ 0 },
 #   where S(i) = PV_A(i) − PV_L(i)
 
-i_n = 0.50
-t_n = 10
+i_n = 0.12
+t_n = 0
 
