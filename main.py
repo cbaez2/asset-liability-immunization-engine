@@ -35,7 +35,7 @@ def main():
 # ===============================
 
     if IMMUNIZATION_TYPE == "full":
-        from full_rebalancer import new_cfs, full_result
+        from full_rebalancer import new_cfs, full_result  #importing new_cfs() function and full_result
 
         print("\n=== FULL IMMUNIZATION ===\n")
 
@@ -61,7 +61,10 @@ def main():
             print("\n--- RE-IMMUNIZATION ---\n")
             print(new_cfs(i_n=i_n, t_n=t_n))
 
-            from plotting import plot_surplus
+
+            from plotting import plot_surplus   # import plot_surplus() function
+            #defining numeric S(i) for plot function
+            
             def S_full(i):
                 if i <= -1:
                     return float("nan")
@@ -88,12 +91,13 @@ def main():
 # ===============================
 
     elif IMMUNIZATION_TYPE == "redington":
-        from red_rebalancer import new_cfs, red_result
-        from interval_finder import interval_finder
+        from red_rebalancer import new_cfs, red_result  #importing function new_cfs and variable red_result
 
         print("\n=== REDINGTON IMMUNIZATION ===\n")
 
         if red_result:
+            from interval_finder import interval_finder #this file assumes red_result is truthy
+
             cf_x = red_result["cf_x"]
             cf_y = red_result["cf_y"]
 
@@ -132,8 +136,9 @@ def main():
             elif iL != 0 and iR == float("inf"):
                 print(f"S(i) ≥ 0  ∀  i ∈ ({iL}, ∞)]")
 
-            from plotting import plot_surplus
+            from plotting import plot_surplus  #importing plot_surplus() function
 
+            #defining numeric S(i) for the plot function
             def S_red(i):
                 if i <= -1:
                     return float("nan")
@@ -145,6 +150,7 @@ def main():
 
                 return PV_A - PV_L
 
+            #plot S(i)
             plot_surplus(
                 S_red,
                 title="Redington Surplus S(i)"
